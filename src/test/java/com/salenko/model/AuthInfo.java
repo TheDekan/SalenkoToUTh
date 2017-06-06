@@ -3,7 +3,7 @@ package com.salenko.model;
 //https://unidoc.unitedthinkers.com/processing-api/realtime/operations#component_Sale_Request_field_group_Authentication_Information
 public class AuthInfo {
 
-	private String requestType;
+    private String requestType;
     private String userName;
     private String password;
     private String accountId;
