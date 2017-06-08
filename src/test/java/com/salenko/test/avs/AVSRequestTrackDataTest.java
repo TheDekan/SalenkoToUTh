@@ -26,7 +26,7 @@ public class AVSRequestTrackDataTest {
     public AVSRequestTrackDataTest(String zipCode, String expectedAvsResponseCode) {
         this.zipCode = zipCode;
         this.expectedAvsResponseCodeString = "avsResponseCode=" + expectedAvsResponseCode;
-        this.saleRequest = new SaleAVSRequestWithAccountData(
+        this.saleRequest = new SaleRequest(
                 new AuthInfo("account-verification", "test_api_user", "C8v20gAdHjig3LMRWGhm5PK1G00v08V1", "2001"),
                 new AccountInfo("R"), new TransactionInfo(5000, "RE"),
                 new AccountData("%25B4111111111111111%5ESMITH%2FJOHN%5E22041011000%201111A123456789012%3F"),
@@ -36,8 +36,7 @@ public class AVSRequestTrackDataTest {
     @Test(timeout = 5000)
     public void testCreateTestDataSuite() {
         try {
-            String REQUEST_URL = "https://sandbox-secure.unitedthinkers.com/gates/xurl?"
-                    + this.saleRequest.toGetParamsString();
+            String REQUEST_URL = this.saleRequest.toGetParamsString();
             String response = HttpRequest.sendGet(REQUEST_URL);
 
             assertTrue("Expect " + expectedAvsResponseCodeString, response.contains(expectedAvsResponseCodeString));
