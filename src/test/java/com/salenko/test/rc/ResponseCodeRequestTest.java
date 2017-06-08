@@ -25,7 +25,7 @@ public class ResponseCodeRequestTest {
     public ResponseCodeRequestTest(int amount, String expectedResponseCode) {
         this.amount = amount;
         this.expectedResponseCodeString = "responseCode=" + expectedResponseCode;
-        this.saleRequest = new SaleRequestWithAccountNumber(
+        this.saleRequest = new SaleRequest(
                 new AuthInfo("sale", "test_api_user", "C8v20gAdHjig3LMRWGhm5PK1G00v08V1", "2001"), new AccountInfo("R"),
                 new TransactionInfo(this.amount, "RE"), new AccountNumber("John Smith", "4111111111111111", "0422"));
     }
@@ -33,8 +33,7 @@ public class ResponseCodeRequestTest {
     @Test(timeout = 5000)
     public void testResponseCode() {
         try {
-            String REQUEST_URL = "https://sandbox-secure.unitedthinkers.com/gates/xurl?"
-                    + this.saleRequest.toGetParamsString();
+            String REQUEST_URL = this.saleRequest.toGetParamsString();
             String response = HttpRequest.sendGet(REQUEST_URL);
 
             assertTrue("Expect " + expectedResponseCodeString, response.contains(expectedResponseCodeString));
