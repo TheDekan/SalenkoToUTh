@@ -3,29 +3,27 @@ package com.salenko.request;
 import com.salenko.model.AuthInfo;
 import com.salenko.model.TransactionInfo;
 import com.salenko.model.account.AccountInfo;
+import com.salenko.utils.ObjToMapConverter;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public abstract class SaleRequest {
-    protected AuthInfo authInfo;
-    protected AccountInfo accountInfo;
-    protected TransactionInfo transactionInfo;
+public class SaleRequest {
+    protected String connectionUrl = "https://sandbox-secure.unitedthinkers.com/gates/xurl?";
+    protected Map<Object, Object> map = new HashMap<Object, Object>();
 
-    public SaleRequest(AuthInfo authInfo, AccountInfo accountInfo, TransactionInfo transactionInfo) {
-        this.authInfo = authInfo;
-        this.accountInfo = accountInfo;
-        this.transactionInfo = transactionInfo;
+    public SaleRequest(Object... args) throws IllegalAccessException {
+        for (Object arg : args) {
+            this.map.putAll(ObjToMapConverter.getKeyValueMap(arg));
+        }
+
     }
-
-    // Convert obj to K-V map
-    public abstract Map toMap() throws IllegalAccessException;
 
     public String toGetParamsString() throws IllegalAccessException {
         StringBuilder paramsStr = new StringBuilder();
-        Map<Object, Object> map = this.toMap();
 
-        for (Map.Entry<Object, Object> entry : map.entrySet()) {
+        for (Map.Entry<Object, Object> entry : this.map.entrySet()) {
             paramsStr.append(entry.getKey() + "=" + entry.getValue() + "&");
         }
 
@@ -33,6 +31,6 @@ public abstract class SaleRequest {
         if (paramsStr.length() > 0)
             paramsStr.setLength(paramsStr.length() - 1);
 
-        return paramsStr.toString().replace(" ", "__");
+        return this.connectionUrl + paramsStr.toString().replace(" ", "__");
     }
 }
